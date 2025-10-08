@@ -3,39 +3,89 @@ plugins {
 	id 'org.springframework.boot' version '3.5.6'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
+//루트 프로젝트는 빌드 x
 
-group = 'Codify'
-version = '0.0.1-SNAPSHOT'
-description = 'Demo project for Spring Boot'
+bootJar.enabled=false
+jar.enabled=false
 
-java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
-	}
+//하위 모듈에 주입할 내용들
+subprojects{
+    group = 'Codify'
+    version = '0.0.1-SNAPSHOT'
+
+    apply plugin: 'java'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    configurations {
+        compileOnly {
+            extendsFrom annotationProcessor
+        }
+    }
+
+    //모든 서비스에서 공통으로 사용할 의존성
+    dependencies {
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        compileOnly 'org.projectlombok:lombok'
+        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+        annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    }
+
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 }
 
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+project(':assignment-service') {
+    dependencies {
+        implementation project(':shboard-common')
+    }
 }
 
-repositories {
-	mavenCentral()
+project(':parsing-service') {
+    dependencies {
+        implementation project(':shboard-common')
+    }
 }
 
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'com.mysql:mysql-connector-j'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+project(':query-service') {
+    dependencies {
+        implementation project(':shboard-common')
+    }
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+project(':similarity-service') {
+    dependencies {
+        implementation project(':shboard-common')
+    }
 }
+
+project(':submit-service') {
+    dependencies {
+        implementation project(':shboard-common')
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+
+bootJar.enabled=false //빌드 X
+jar.enabled=true //다른 모듈 의존할 수 있도록 .jar 빌드
+
+dependencies {
+
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+test {
+    useJUnitPlatform()
+}
