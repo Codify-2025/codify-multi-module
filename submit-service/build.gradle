@@ -13,6 +13,38 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    //health check
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    //database + jpa
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    //spring mvc
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    //discovery
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    //swagger
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
+
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    //rabbitMQ
+    implementation 'org.springframework.boot:spring-boot-starter-amqp'
+
+    //mongodb
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    //prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
 }
 
 test {

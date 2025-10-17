@@ -27,6 +27,16 @@ subprojects{
         mavenCentral()
     }
 
+    ext {
+        set('springCloudVersion', "2025.0.0")
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
+
     configurations {
         compileOnly {
             extendsFrom annotationProcessor
@@ -35,13 +45,13 @@ subprojects{
 
     //모든 서비스에서 공통으로 사용할 의존성
     dependencies {
-        implementation 'org.springframework.boot:spring-boot-starter-actuator'
-        implementation 'org.springframework.boot:spring-boot-starter-web'
-        compileOnly 'org.projectlombok:lombok'
-        developmentOnly 'org.springframework.boot:spring-boot-devtools'
-        annotationProcessor 'org.projectlombok:lombok'
-        testImplementation 'org.springframework.boot:spring-boot-starter-test'
-        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+//        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+//        implementation 'org.springframework.boot:spring-boot-starter-web'
+//        compileOnly 'org.projectlombok:lombok'
+//        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//        annotationProcessor 'org.projectlombok:lombok'
+//        testImplementation 'org.springframework.boot:spring-boot-starter-test'
+//        testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
 
     tasks.named('test') {
@@ -51,31 +61,31 @@ subprojects{
 
 project(':assignment-service') {
     dependencies {
-        implementation project(':shboard-common')
+        implementation project(':codify-common')
     }
 }
 
 project(':parsing-service') {
     dependencies {
-        implementation project(':shboard-common')
+        implementation project(':codify-common')
     }
 }
 
 project(':query-service') {
     dependencies {
-        implementation project(':shboard-common')
+        implementation project(':codify-common')
     }
 }
 
 project(':similarity-service') {
     dependencies {
-        implementation project(':shboard-common')
+        implementation project(':codify-common')
     }
 }
 
 project(':submit-service') {
     dependencies {
-        implementation project(':shboard-common')
+        implementation project(':codify-common')
     }
 }
 

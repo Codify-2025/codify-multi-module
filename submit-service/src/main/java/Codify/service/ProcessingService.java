@@ -1,0 +1,116 @@
+package Codify.service;
+
+import Codify.domain.ProcessingGroup;
+import Codify.dto.MessageDto;
+import Codify.exception.group.GroupIsNotReadyException;
+import Codify.repository.ProcessingRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Optional;
+
+import static Codify.domain.ProcessingGroup.GroupStatus.PROCESSING;
+
+@Service
+@RequiredArgsConstructor
+@Slf4j
+public class ProcessingService {
+
+    private final ProcessingRepository processingRepository;
+    private final RabbitTemplate rabbitTemplate;
+
+    //첫 번째 ~ 마지막 이전
+    @Transactional
+    public void addFileUploadToGroup(Long assignmentId, Long submissionId, Long studentId, String s3Key) {
+        // 기존 그룹 찾기 또는 새 그룹 생성
+        Optional<ProcessingGroup> existingGroup = processingRepository.findGroupByAssignmentId(assignmentId);
+
+        ProcessingGroup group;
+
+        //그룹이 mongodb에 존재한다면
+        if (existingGroup.isPresent()) {
+            group = existingGroup.get();
+            //submissionId 중복체크
+            if (!group.getSubmissionIds().contains(submissionId)) {
+                group.getSubmissionIds().add(submissionId);
+            }
+        } else {
+            group = ProcessingGroup.createGroup(assignmentId, submissionId,studentId,s3Key);
+        }
+
+        //db에 저장
+        processingRepository.save(group);
+    }
+
+    //마지막 파일
+    //group의 status를 COMPLETED로 변경 후 디비에 저장
+    @Transactional
+    public void addLastFileToGroup(Long assignmentId, Long submissionId, Long studentId, String s3Key) {
+        addFileUploadToGroup(assignmentId, submissionId, studentId, s3Key);
+
+        Optional<ProcessingGroup> lastUploadGroup = processingRepository.findGroupByAssignmentId(assignmentId);
+
+        if(lastUploadGroup.isPresent()) {
+            ProcessingGroup group = lastUploadGroup.get();
+            if (group.getStatus()== PROCESSING) {
+                log.info("adding last upload group");
+                //processing을 complete로 변경
+                group.completeProcessing();
+                processingRepository.save(group);
+
+                //group 객체로 메시지 생성
+                MessageDto message = toProcessingMessage(group);
+
+                //커밋 후 메시지 전송
+                TransactionSynchronizationManager.registerSynchronization(
+                        new TransactionSynchronization() {
+                            @Override
+                            public void afterCommit() {
+                                log.info("Transaction committed, sending message to queue");
+                                rabbitTemplate.convertAndSend("codifyExchange", "file.upload", message);
+                                log.info("parsing queue에 push완료");
+
+                                // 메시지 전송 후 처리된 그룹 삭제
+                                processingRepository.deleteById(group.getId());
+                                log.info("Processing group deleted: {}", group.getId());
+                            }
+                        }
+                );
+
+
+            }
+        }
+    }
+
+
+    //group 정보를 메시지로 변환
+    public MessageDto toProcessingMessage(ProcessingGroup group) {
+        if (group.getStatus().equals(PROCESSING)) {
+            throw new GroupIsNotReadyException();
+        }
+
+        String batchGroupId = String.format("assignment_%d_batch_%d",
+                group.getAssignmentId(),
+                System.currentTimeMillis());
+
+        return new MessageDto(
+                "FILE_UPLOADED",
+                batchGroupId,
+                group.getAssignmentId(),
+                new ArrayList<>(group.getSubmissionIds()), // 복사본 반환
+                new ArrayList<>(group.getStudentIds()),
+                new ArrayList<>(group.getS3Keys()),
+                group.getSubmissionIds().size(),
+                LocalDateTime.now()
+        );
+    }
+
+
+}
