@@ -1,16 +1,16 @@
 package Codify.service;
 
-import Codify.dto.response.StudentResponseDto;
-import Codify.dto.response.all.AccumulateResponseDto;
-import Codify.dto.response.all.DashboardAllResponseDto;
-import Codify.dto.response.all.FindResultDto;
-import Codify.dto.response.data.DashboardDataDto;
-import Codify.dto.response.data.SubjectDataDto;
-import Codify.dto.response.data.UserDataDto;
-import Codify.dto.response.week.AccumulateWeekResponseDto;
-import Codify.dto.response.week.DashboardWeekResponseDto;
-import Codify.dto.response.week.FindWeekResultDto;
-import Codify.dto.response.week.WeekDataDto;
+import Codify.dto.dashboard.response.StudentResponseDto;
+import Codify.dto.dashboard.response.all.AccumulateResponseDto;
+import Codify.dto.dashboard.response.all.DashboardAllResponseDto;
+import Codify.dto.dashboard.response.all.FindResultDto;
+import Codify.dto.dashboard.response.data.DashboardDataDto;
+import Codify.dto.dashboard.response.data.SubjectDataDto;
+import Codify.dto.dashboard.response.data.UserDataDto;
+import Codify.dto.dashboard.response.week.AccumulateWeekResponseDto;
+import Codify.dto.dashboard.response.week.DashboardWeekResponseDto;
+import Codify.dto.dashboard.response.week.FindWeekResultDto;
+import Codify.dto.dashboard.response.week.WeekDataDto;
 import Codify.repository.AssignmentRepository;
 import Codify.repository.SubjectRepository;
 import Codify.repository.SubmissionRepository;

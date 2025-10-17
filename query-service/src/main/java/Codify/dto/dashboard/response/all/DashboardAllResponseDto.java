@@ -1,7 +1,7 @@
-package Codify.dto.response.all;
+package Codify.dto.dashboard.response.all;
 
 
-import Codify.dto.response.StudentResponseDto;
+import Codify.dto.dashboard.response.StudentResponseDto;
 
 import java.util.List;
 

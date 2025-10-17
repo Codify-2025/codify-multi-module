@@ -36,6 +36,10 @@ dependencies {
     //prometheus
     implementation 'io.micrometer:micrometer-registry-prometheus'
 
+    // AWS SDK
+    implementation platform('software.amazon.awssdk:bom:2.20.162')
+    implementation 'software.amazon.awssdk:s3'
+
 }
 
 test {

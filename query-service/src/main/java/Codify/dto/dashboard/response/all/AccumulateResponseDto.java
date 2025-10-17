@@ -1,4 +1,4 @@
-package Codify.dto.response.all;
+package Codify.dto.dashboard.response.all;
 import lombok.Builder;
 
 @Builder

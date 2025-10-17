@@ -1,6 +1,6 @@
-package Codify.dto.response.week;
+package Codify.dto.dashboard.response.week;
 
-import Codify.dto.response.StudentResponseDto;
+import Codify.dto.dashboard.response.StudentResponseDto;
 
 import java.util.List;
 

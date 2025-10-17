@@ -1,4 +1,4 @@
-package Codify.dto.response.data;
+package Codify.dto.dashboard.response.data;
 
 import java.util.List;
 

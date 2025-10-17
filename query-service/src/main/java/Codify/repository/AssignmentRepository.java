@@ -1,8 +1,8 @@
 package Codify.repository;
 
 import Codify.domain.Assignment;
-import Codify.dto.response.all.FindResultDto;
-import Codify.dto.response.week.FindWeekResultDto;
+import Codify.dto.dashboard.response.all.FindResultDto;
+import Codify.dto.dashboard.response.week.FindWeekResultDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

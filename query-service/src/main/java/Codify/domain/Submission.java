@@ -36,4 +36,7 @@ public class Submission {
     @Column(name = "studentName")
     private String studentName;
 
+    @Column(name = "s3Key")
+    private String s3Key;
+
 }

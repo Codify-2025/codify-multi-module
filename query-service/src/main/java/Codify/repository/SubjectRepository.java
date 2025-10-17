@@ -1,7 +1,7 @@
 package Codify.repository;
 
 import Codify.domain.Subjects;
-import Codify.dto.response.data.SubjectDataDto;
+import Codify.dto.dashboard.response.data.SubjectDataDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
